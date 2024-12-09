@@ -25,7 +25,7 @@ def main():
     for idx, elem in enumerate(disk):
         if elem == "." and idx != len(disk) - 1:
             while (popped := disk.pop()) == ".":
-                pass
+                continue
             disk[idx] = popped
     print_disk(disk)
 
