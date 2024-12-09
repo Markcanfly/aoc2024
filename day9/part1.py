@@ -1,6 +1,10 @@
 import sys
 
 
+def print_disk(disk: list):
+    print("".join(list(map(str, disk))))
+
+
 def main():
     if len(sys.argv) != 2:
         raise ValueError("1 argument expected: inputfile")
@@ -12,20 +16,18 @@ def main():
     for idx, elem in enumerate(line):
         if idx % 2 == 0:
             id = idx // 2
-            disk.append(int(elem) * str(id))
+            disk.extend(int(elem) * [id])
         else:
-            disk.append(int(elem) * ".")
+            disk.extend(int(elem) * ["."])
 
-    disk = list("".join(disk))  # condense
+    print_disk(disk)
 
     for idx, elem in enumerate(disk):
         if elem == "." and idx != len(disk) - 1:
             while (popped := disk.pop()) == ".":
                 pass
             disk[idx] = popped
-            # print("".join(disk))
-
-    print("".join(disk))
+    print_disk(disk)
 
     checksum = sum(idx * int(elem) for idx, elem in enumerate(disk))
     print("Checksum:", checksum)
