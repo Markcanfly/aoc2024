@@ -26,7 +26,11 @@ def main():
         if elem == "." and idx != len(disk) - 1:
             while (popped := disk.pop()) == ".":
                 continue
-            disk[idx] = popped
+            try:
+                disk[idx] = popped
+            except IndexError:
+                # oops popped too many of them
+                disk.append(popped)
     print_disk(disk)
 
     checksum = sum(idx * int(elem) for idx, elem in enumerate(disk))
