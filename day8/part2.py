@@ -7,26 +7,26 @@ from typing import DefaultDict, Generator
 
 @dataclass
 class Vec:
-    y: int
     x: int
+    y: int
 
     def __add__(self, other: "Vec") -> "Vec":
-        return Vec(self.y + other.y, self.x + other.x)
+        return Vec(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other: "Vec") -> "Vec":
-        return Vec(self.y - other.y, self.x - other.x)
+        return Vec(self.x - other.x, self.y - other.y)
 
     def __eq__(self, other) -> bool:
-        return self.y == other.y and self.x == other.x
+        return self.x == other.x and self.y == other.y
 
     def __lt__(self, other) -> bool:
-        return self.y < other.y and self.x < other.x
+        return self.x < other.x and self.y < other.y
 
     def __le__(self, other) -> bool:
-        return self.y <= other.y and self.x <= other.x
+        return self.x <= other.x and self.y <= other.y
 
     def __hash__(self) -> int:
-        return hash((self.y, self.x))
+        return hash((self.x, self.y))
 
 
 @dataclass
@@ -39,10 +39,10 @@ class Line:
     def grid_points(self, size: tuple[int, int]) -> Generator[Vec, None, None]:
         for x in range(size[1]):
             candidate_y = self.m * x + self.b
-            candidate_vec = Vec(round(candidate_y), x)
+            candidate_vec = Vec(x, round(candidate_y))
             if (abs(candidate_y - round(candidate_y)) < 0.01) and Vec(
                 0, 0
-            ) <= candidate_vec < Vec(size[0], size[1]):  # only check whole numbers
+            ) <= candidate_vec < Vec(size[1], size[0]):  # only check whole numbers
                 yield candidate_vec
 
 
@@ -65,14 +65,14 @@ def main():
 
     with open(sys.argv[1]) as infile:
         mx = [line.strip() for line in infile]
-    size = (len(mx), len(mx[0]))
+    size = (len(mx[0]), len(mx))
 
     antenna_positions: DefaultDict[str, list[Vec]] = defaultdict(list)
     for y in range(size[0]):
         for x in range(size[1]):
             tile = mx[y][x]
             if tile != ".":
-                antenna_positions[tile].append(Vec(y, x))
+                antenna_positions[tile].append(Vec(x, y))
 
     lines: list[Line] = []
     for antennae in antenna_positions.values():
