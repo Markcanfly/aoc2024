@@ -32,11 +32,8 @@ def main():
         endblock = disk[endblock_i]
         if not empty_places[endblock_i] == length[endblock_i]:
             # Find first block with sufficient empty places left
-            for startblock_i in range(len(disk)):
-                if (
-                    empty_places[startblock_i] >= length[endblock_i]
-                    and startblock_i < endblock_i
-                ):
+            for startblock_i in range(endblock_i):
+                if empty_places[startblock_i] >= length[endblock_i]:
                     startblock = disk[startblock_i]
                     start = length[startblock_i] - empty_places[startblock_i]
                     for idx, el in enumerate(endblock):
