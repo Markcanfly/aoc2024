@@ -27,21 +27,24 @@ def main():
 
     print_disk(disk)
 
-    for endblock_i in range(len(disk[::-1]) - 1, -1, -1):
+    # Cache empty places
+    empty_places = {idx: len([p for p in b if p == "."]) for idx, b in enumerate(disk)}
+
+    for endblock_i in range(len(disk) - 1, -1, -1):
         endblock = disk[endblock_i]
         if not all_empty(endblock):
+            # Find first block with sufficient space left
             for startblock_i in range(len(disk)):
-                startblock = disk[startblock_i]
                 if (
-                    (empty_places := len([b for b in startblock if b == "."]))
-                    and empty_places >= len(endblock)
+                    empty_places[startblock_i] >= len(endblock)
                     and startblock_i < endblock_i
                 ):
-                    start = len(startblock) - empty_places
-                    # breakpoint()
+                    startblock = disk[startblock_i]
+                    start = len(startblock) - empty_places[startblock_i]
                     for idx, el in enumerate(endblock):
                         startblock[start + idx] = el
                     disk[endblock_i] = len(endblock) * ["."]
+                    empty_places[startblock_i] -= len(endblock)
                     break
     print_disk(disk)
     flattened_disk = [b for fragment in disk for b in fragment]
