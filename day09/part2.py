@@ -5,10 +5,6 @@ def print_disk(disk: list):
     print("".join("".join(map(str, el)) for el in disk))
 
 
-def all_empty(diskpart: list) -> bool:
-    return all(x == "." for x in diskpart)
-
-
 def main():
     if len(sys.argv) != 2:
         raise ValueError("1 argument expected: inputfile")
@@ -27,24 +23,25 @@ def main():
 
     print_disk(disk)
 
-    # Cache empty places
+    # Cache empty places and length
     empty_places = {idx: len([p for p in b if p == "."]) for idx, b in enumerate(disk)}
+    length = {idx: len(b) for idx, b in enumerate(disk)}
 
     for endblock_i in range(len(disk) - 1, -1, -1):
         endblock = disk[endblock_i]
-        if not all_empty(endblock):
-            # Find first block with sufficient space left
+        if not empty_places[endblock_i] == length[endblock_i]:
+            # Find first block with sufficient empty places left
             for startblock_i in range(len(disk)):
                 if (
-                    empty_places[startblock_i] >= len(endblock)
+                    empty_places[startblock_i] >= length[endblock_i]
                     and startblock_i < endblock_i
                 ):
                     startblock = disk[startblock_i]
-                    start = len(startblock) - empty_places[startblock_i]
+                    start = length[startblock_i] - empty_places[startblock_i]
                     for idx, el in enumerate(endblock):
                         startblock[start + idx] = el
-                    disk[endblock_i] = len(endblock) * ["."]
-                    empty_places[startblock_i] -= len(endblock)
+                    disk[endblock_i] = length[endblock_i] * ["."]
+                    empty_places[startblock_i] -= length[endblock_i]
                     break
     print_disk(disk)
     flattened_disk = [b for fragment in disk for b in fragment]
