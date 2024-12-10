@@ -41,12 +41,10 @@ def main():
 
     for zero in zeroes_reach:
         # BFS
-        visited = []
         to_visit = list(neighbours(mx, zero))
         while to_visit:
             current = to_visit.pop(0)
-            visited.append(current)
-            to_visit.extend(n for n in neighbours(mx, current) if n not in visited)
+            to_visit.extend(n for n in neighbours(mx, current))
             if mx[current[1]][current[0]] == 9:
                 zeroes_reach[zero].add(current)
     print(zeroes_reach)
