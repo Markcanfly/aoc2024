@@ -9,6 +9,14 @@ def print_mx(mx: list[list[int]]):
         print(row)
 
 
+def print_reachable(reachable: dict[tuple[int, int], dict[tuple[int, int], int]]):
+    for zero_location in reachable:
+        print("---")
+        print("Reachable from", zero_location)
+        for nine_location in reachable[zero_location]:
+            print(f"{nine_location} - {reachable[zero_location][nine_location]} times")
+
+
 def in_mx(mx: list[list[int]], coordinates: tuple[int, int]) -> bool:
     return 0 <= coordinates[0] < len(mx[0]) and 0 <= coordinates[1] < len(mx)
 
@@ -39,7 +47,6 @@ def main():
         for x in range(len(mx[0])):
             if mx[y][x] == 0:
                 zeroes_reach[(x, y)] = defaultdict(builtins.int)
-    print(zeroes_reach)
 
     for zero in zeroes_reach:
         # BFS
@@ -49,7 +56,7 @@ def main():
             to_visit.extend(n for n in neighbours(mx, current))
             if mx[current[1]][current[0]] == 9:
                 zeroes_reach[zero][current] += 1
-    print(zeroes_reach)
+    print_reachable(zeroes_reach)
 
     total_score = sum(
         [sum(count for count in peaks.values()) for peaks in zeroes_reach.values()]
