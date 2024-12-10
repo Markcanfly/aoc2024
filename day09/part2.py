@@ -22,6 +22,7 @@ def main():
                 disk.append(int(elem) * ["."])
 
     print_disk(disk)
+    BIG_DISK = len(disk) > 90
 
     # Cache empty places and length
     empty_places = {idx: len([p for p in b if p == "."]) for idx, b in enumerate(disk)}
@@ -42,8 +43,11 @@ def main():
                         startblock[start + idx] = el
                     disk[endblock_i] = length[endblock_i] * ["."]
                     empty_places[startblock_i] -= length[endblock_i]
+                    if not BIG_DISK:
+                        print_disk(disk)
                     break
-    print_disk(disk)
+    if BIG_DISK:
+        print_disk(disk)
     flattened_disk = [b for fragment in disk for b in fragment]
     checksum = sum(idx * val for idx, val in enumerate(flattened_disk) if val != ".")
     print("Checksum:", checksum)
