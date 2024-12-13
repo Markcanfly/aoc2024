@@ -1,13 +1,14 @@
 import sys
 from functools import cache
+from math import log10
 
 
 @cache
 def blink(number: int) -> int | tuple[int, int]:
     if number == 0:
         return 1
-    elif len(str_item := str(number)) % 2 == 0:
-        return int(str_item[: len(str_item) // 2]), int(str_item[len(str_item) // 2 :])
+    elif (digits := int(log10(number)) + 1) % 2 == 0:
+        return (number // (10**digits // 2), (number % (10**digits // 2)))
     else:
         return 2024 * number
 
