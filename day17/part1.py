@@ -2,7 +2,10 @@ import sys
 from typing import Literal
 
 
-def combo(operand: int, registers: dict[Literal["A", "B", "C"], int]) -> int:
+def combo(
+    operand: Literal[0, 1, 2, 3, 4, 5, 6, 7],
+    registers: dict[Literal["A", "B", "C"], int],
+) -> int:  # pyright: ignore (can't handle complex matches)
     match operand:
         case n if 0 <= n <= 3:
             return n
@@ -31,9 +34,9 @@ def main():
             map(int, raw_program.strip().removeprefix("Program: ").split(","))
         )
 
-        operations = list(
-            (program[idx], program[idx + 1]) for idx in range(0, len(program), 2)
-        )
+        operations: list[
+            tuple[Literal[0, 1, 2, 3, 4, 5, 6, 7], Literal[0, 1, 2, 3, 4, 5, 6, 7]]
+        ] = list((program[idx], program[idx + 1]) for idx in range(0, len(program), 2))  # pyright: ignore (I promise it's correct)
 
     ptr = 0
     print_buffer = []
